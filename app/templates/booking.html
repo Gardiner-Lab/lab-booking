@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Booking</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📅</text></svg>">
+    <link rel="stylesheet" href="{{ request.script_root }}/static/css/booking.css?v={{ version }}">
+</head>
+<body{% if embed %} class="embedded"{% endif %}>
+{% if not embed %}
+<header class="topbar">
+    <a class="topbar-back" href="{{ links.suite_home }}">← Lab tools</a>
+    <span class="topbar-title">📅 Booking</span>
+    <nav class="view-tabs">
+        <a class="view-tab" data-view="calendar" href="#calendar">Calendar</a>
+        <a class="view-tab" data-view="find" href="#find">Find a slot</a>
+        <a class="view-tab" data-view="mine" href="#mine">My bookings</a>
+        {% if person.can_add %}<a class="view-tab" data-view="manage" href="#manage">Rooms &amp; equipment</a>{% endif %}
+    </nav>
+    <nav class="topbar-nav">
+        <a href="{{ links.notebook }}/" target="_blank" rel="noopener">Notebook ↗</a>
+    </nav>
+    <span class="topbar-user">{{ person.username }}{% if person.labs %} · {{ person.labs[0].lab }}{% endif %}{% if person.is_admin %} · admin{% endif %}</span>
+    <a class="topbar-logout" href="{{ links.logout }}">Log out</a>
+</header>
+{% endif %}
+<main class="main" id="main"></main>
+<dialog id="dialog" class="dialog"></dialog>
+<div id="toasts" class="toasts" role="status" aria-live="polite"></div>
+<script>
+    window.BK = {
+        base: {{ request.script_root | tojson }},
+        notebook: {{ links.notebook | tojson }},
+        person: {{ person.to_dict() | tojson }},
+        embed: {{ 'true' if embed else 'false' }},
+    };
+</script>
+<script src="{{ request.script_root }}/static/js/booking.js?v={{ version }}"></script>
+</body>
+</html>

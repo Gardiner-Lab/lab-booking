@@ -1,0 +1,7 @@
+# Web framework
+Flask==3.0.3
+# Time zones (the lab's, for opening hours and days)
+tzdata==2024.2
+
+# Testing
+pytest==8.3.4
