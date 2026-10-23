@@ -5,6 +5,8 @@ and the project uses [semantic versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-10-23
+
 ### Changed
 - Someone who has left (archived in the suite) is no longer offered to tag, and what they booked for
   after they left is freed; what they booked before stays.
