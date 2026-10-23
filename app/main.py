@@ -17,9 +17,9 @@ APP_VERSION = '0.1.2'
 MANIFEST = {
     'tool': 'Booking',
     'tabs': [
-        {'id': 'booking-mine', 'title': 'My bookings', 'icon': '📅', 'section': 'me',
+        {'id': 'booking-mine', 'title': 'My bookings', 'icon': '📅', 'glyph': 'calendar', 'section': 'me',
          'src': '/booking/?embed=1#mine'},
-        {'id': 'booking-manage', 'title': 'Rooms & equipment', 'icon': '🔬', 'section': 'admin',
+        {'id': 'booking-manage', 'title': 'Rooms & equipment', 'icon': '🔬', 'glyph': 'box', 'section': 'admin',
          'roles': ['admin', 'lab_admin'], 'src': '/booking/?embed=1#manage'},
     ],
 }

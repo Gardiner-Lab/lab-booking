@@ -589,7 +589,7 @@ function editResource(r) {
   const dlg = $('dialog');
   const c = state.choices;
   const field = (label, input, hint) => el('label', { class: 'field' }, el('span', {}, label), input, hint ? el('span', { class: 'hint' }, hint) : null);
-  const v = r || { name: '', kind: '', location: '', description: '', colour: '#7c3aed', capacity: 1, step_minutes: 30, min_minutes: 30,
+  const v = r || { name: '', kind: '', location: '', description: '', colour: '#2f8f46', capacity: 1, step_minutes: 30, min_minutes: 30,
     max_minutes: null, advance_days: null, open_from: '08:00', open_until: '18:00', weekdays: '12345',
     owner_lab_id: c.own_labs[0]?.id, everyone: false, shares: null };
   const kindList = el('datalist', { id: 'kind-ideas' }, [...new Set([...state.kinds, ...KIND_IDEAS])].map((k) => el('option', { value: k })));
