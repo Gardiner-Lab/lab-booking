@@ -5,6 +5,8 @@ and the project uses [semantic versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-10-23
+
 ### Changed
 - The suite it runs in is called Trellis Tools, as its docs now say.
 
