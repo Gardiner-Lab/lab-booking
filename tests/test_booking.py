@@ -271,3 +271,32 @@ def test_the_page_and_the_dashboard_tabs(as_user, world):
     assert {t['id'] for t in tabs} == {'booking-mine', 'booking-manage'}
     assert as_user('ana').get('/api/me').get_json()['person']['role'] == 'lab_admin'
     assert as_user('ben').get('/api/me').get_json()['person']['can_add'] is False
+
+
+def leaves(world, username, when='2000-01-01T00:00:00Z'):
+    """They are archived in the suite (left), as the sign-in service records it."""
+    import sqlite3
+    conn = sqlite3.connect(world['paths']['suite'])
+    conn.execute('CREATE TABLE IF NOT EXISTS archived (username TEXT PRIMARY KEY, archived_at TEXT, archived_by TEXT)')
+    conn.execute('INSERT INTO archived VALUES (?, ?, ?)', (username, when, 'ana'))
+    conn.commit()
+    conn.close()
+
+
+def test_someone_who_left_frees_their_bookings_ahead(as_user, world):
+    ana, ben, cal = as_user('ana'), as_user('ben'), as_user('cal')
+    room = add(ana)
+    day = weekday_ahead()
+    meeting = book(ben, room, day, '10:00', '11:00', people=['cal']).get_json()['booking']
+    leaves(world, 'ben', datetime.now(ZoneInfo('UTC')).strftime('%Y-%m-%dT%H:%M:%SZ'))
+    # Freed: not on the calendar, not in cal's bookings, and bookable by someone else.
+    week = {'from': at(day, '00:00'), 'to': at(day + timedelta(days=1), '00:00')}
+    assert ana.get('/api/bookings', query_string={**week, 'resource': room['id']}).get_json()['bookings'] == []
+    assert cal.get('/api/bookings/mine').get_json()['bookings'] == []
+    assert book(cal, room, day, '10:00', '11:00').status_code == 201
+    # Not offered to tag any more; someone already tagged in a booking stays when it is saved again.
+    assert 'ben' not in ana.get('/api/people').get_json()['people']
+    other = book(ana, room, day, '12:00', '13:00', people=['cal']).get_json()['booking']
+    leaves(world, 'cal')
+    assert ana.put(f"/api/bookings/{other['id']}", json={'title': 'Still', 'people': ['cal']}).status_code == 200
+    assert meeting['id']

@@ -77,10 +77,20 @@ def memberships(username: str) -> List[dict]:
              'lab_admin': bool(r['lab_admin']) and (r['role'] == 'lab_lead')} for r in rows]
 
 
-def everyone() -> List[str]:
-    """Everyone with an account, by name, to tag in bookings."""
+def archived() -> Dict[str, str]:
+    """
+    People who have left: archived by their lab admin or an administrator on the
+    suite's dashboard (suite.db: archived), username -> when (UTC). Their work
+    stays for their labs; they are left out of lists of people to choose from.
+    """
+    return {r['username']: r['archived_at'] for r in _read(suite_path(), 'SELECT username, archived_at FROM archived')}
+
+
+def everyone(include_archived: bool = False) -> List[str]:
+    """Everyone with an account, by name, to tag in bookings: not those who left, unless asked for."""
+    gone = {} if include_archived else archived()
     return [r['username'] for r in _read(directory_path(), 'SELECT username FROM users ORDER BY username COLLATE NOCASE')
-            if r['username'] != 'system']
+            if r['username'] != 'system' and r['username'] not in gone]
 
 
 @dataclass

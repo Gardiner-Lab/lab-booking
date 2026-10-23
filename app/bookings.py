@@ -22,7 +22,7 @@ from typing import Dict, Iterable, List, Optional
 from app import resources as res
 from app import times
 from app.db import connect
-from app.people import Person, everyone
+from app.people import Person, archived, everyone
 from app.resources import Forbidden, NotFound
 
 # The calendar and the search ask for at most this many days at a time.
@@ -43,6 +43,18 @@ def _people(conn, ids: Iterable[str]) -> Dict[str, List[str]]:
                               f'({", ".join("?" * len(ids))}) ORDER BY username COLLATE NOCASE', ids):
             found[r['booking_id']].append(r['username'])
     return found
+
+
+def standing(rows) -> list:
+    """
+    The bookings that still stand: not those someone who has left (archived in
+    the suite) made for after they left - those are freed for others. What they
+    booked before stays, in the calendar and in notebooks.
+    """
+    gone = archived()
+    if not gone:
+        return list(rows)
+    return [r for r in rows if not (r['booked_by'] in gone and r['ends_at'] > gone[r['booked_by']])]
 
 
 def to_dict(person: Person, row, resource, people: List[str]) -> dict:
@@ -79,6 +91,7 @@ def in_range(person: Person, start: str, end: str, resource_ids: Optional[List[s
             f"SELECT * FROM bookings WHERE resource_id IN ({', '.join('?' * len(ids))}) AND status != 'cancelled' "
             'AND starts_at < ? AND ends_at > ? ORDER BY starts_at',
             (*ids, times.store(end_at), times.store(start_at))).fetchall()
+        rows = standing(rows)
         by_id = res.rows_by_id(conn, ids)
         people = _people(conn, [r['id'] for r in rows])
         return {'resources': shown,
@@ -94,6 +107,7 @@ def mine(person: Person, past_days: int = 0) -> List[dict]:
             "WHERE (b.booked_by = ? OR p.username = ?) AND b.status != 'cancelled' AND b.kind = 'booking' "
             "AND b.ends_at > ? ORDER BY b.starts_at LIMIT 300",
             (person.username, person.username, since)).fetchall()
+        rows = standing(rows)
         by_id = res.rows_by_id(conn, {r['resource_id'] for r in rows})
         people = _people(conn, [r['id'] for r in rows])
         return [to_dict(person, r, by_id[r['resource_id']], people[r['id']]) for r in rows]
@@ -162,10 +176,10 @@ def _duration(mins: int) -> str:
 
 
 def _overlapping(conn, resource_id: str, start: datetime, end: datetime, exclude: Optional[str] = None):
-    return conn.execute(
+    return standing(conn.execute(
         "SELECT * FROM bookings WHERE resource_id = ? AND status != 'cancelled' AND starts_at < ? AND ends_at > ? "
         "AND id != ? ORDER BY starts_at",
-        (resource_id, times.store(end), times.store(start), exclude or '')).fetchall()
+        (resource_id, times.store(end), times.store(start), exclude or '')).fetchall())
 
 
 def _peak(rows, start: str, end: str) -> int:
@@ -204,7 +218,7 @@ def _clean_people(people, booker: str) -> List[str]:
         return []
     if not isinstance(people, list):
         raise ValueError('People are a list of usernames')
-    known = {u.casefold(): u for u in everyone()}
+    known = {u.casefold(): u for u in everyone(include_archived=True)}
     out = []
     for name in people:
         found = known.get(str(name or '').strip().casefold())
