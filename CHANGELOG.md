@@ -5,6 +5,13 @@ and the project uses [semantic versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+- **Trellis Tools' look**: the header every module shares (Trellis Tools, then this module's icon and name,
+  its tabs, the person and Log out), and the suite's palette - green for what you do, brown for structure,
+  on warm paper-white - from static/trellis/trellis.css, copied in from the suite (design/sync.sh). New rooms and
+  equipment are green to start with.
+- Its dashboard tabs name a Trellis Tools glyph ("glyph"), shown in place of their emoji.
+
 ## [0.1.2] - 2026-10-23
 
 ### Changed
