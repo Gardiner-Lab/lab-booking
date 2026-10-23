@@ -1,6 +1,6 @@
 # Booking
 
-The Gardiner Lab suite's calendar for rooms and equipment: meeting rooms,
+Trellis Tools' calendar for rooms and equipment: meeting rooms,
 microscopes, growth chambers, anything a lab books ahead.
 
 - **Rooms and equipment are added by people, not code.** A lab's lab admins (and
@@ -30,7 +30,7 @@ not switched on: every booking stands.
 
 ## Running it
 
-It runs in the [Gardiner Lab suite](https://github.com/Gardiner-Lab/gardiner-lab-suite),
+It runs in [Trellis Tools](https://github.com/Gardiner-Lab/gardiner-lab-suite),
 behind its proxy, which says who is signed in (`X-Suite-User`). It reads the
 suite's accounts and labs and never writes them.
 

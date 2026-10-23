@@ -1,5 +1,5 @@
 """
-Booking: the Gardiner Lab suite's calendar for rooms and equipment.
+Booking: Trellis Tools' calendar for rooms and equipment.
 
 Meeting rooms, microscopes, growth chambers: whatever a lab's lab admins add,
 shared with the labs and chair groups they choose, booked ahead on a week
