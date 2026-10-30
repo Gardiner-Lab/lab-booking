@@ -64,6 +64,14 @@ def create_app() -> Flask:
         return render_template('booking.html', version=APP_VERSION, person=person, links=links(),
                                embed=request.args.get('embed') == '1')
 
+    @app.route('/about')
+    def about_page():
+        return render_template('about.html', version=APP_VERSION, links=links())
+
+    @app.route('/help')
+    def help_page():
+        return render_template('help.html', version=APP_VERSION, links=links())
+
     @app.route('/suite-manifest.json')
     def suite_manifest():
         return MANIFEST

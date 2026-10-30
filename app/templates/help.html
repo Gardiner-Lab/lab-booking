@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Help · Booking</title>
+    <link rel="stylesheet" href="{{ request.script_root }}/static/trellis/trellis.css?v={{ version }}">
+    <link rel="stylesheet" href="{{ request.script_root }}/static/css/booking.css?v={{ version }}">
+</head>
+<body class="tt">
+<header class="tt-bar">
+    <a class="tt-home" href="{{ links.suite_home }}" title="All of Trellis Tools"><img src="{{ request.script_root }}/static/trellis/trellis.svg" alt=""><span>Trellis Tools</span></a>
+    <a class="tt-module" href="{{ request.script_root }}/"><img src="{{ request.script_root }}/static/trellis/booking.svg" alt="">Booking</a><span class="tt-sub">Help</span>
+</header>
+<main class="help">
+    <h1>How to use Booking</h1>
+    <p class="lead">A shared calendar only works if people book before they use something, and give the time
+       back when they do not. This page covers booking, finding a free slot, tagging the people with you,
+       changing and cancelling, and &mdash; for lab admins &mdash; adding a room or instrument and setting its
+       rules. <a href="{{ request.script_root }}/about">What Booking is →</a></p>
+
+    <nav class="help-toc">
+        <a href="#rules">Golden rules</a>
+        <a href="#book">Booking something</a>
+        <a href="#find">Finding a free slot</a>
+        <a href="#people">The people with you</a>
+        <a href="#mine">Changing and cancelling</a>
+        <a href="#refused">When a booking is refused</a>
+        <a href="#notebook">Your notebook</a>
+        <a href="#manage">Adding a room or instrument</a>
+        <a href="#limits">Setting the rules</a>
+        <a href="#sharing">Sharing it</a>
+        <a href="#mistakes">Fixing mistakes</a>
+    </nav>
+
+    <section id="rules">
+        <h2>Golden rules</h2>
+        <ol class="rules">
+            <li><b>Book before you use it,</b> not after. A calendar that is filled in afterwards tells nobody
+                anything while it matters.</li>
+            <li><b>Give the time back.</b> Cancel as soon as you know you are not coming; the slot is no use to
+                anyone while it is still yours.</li>
+            <li><b>Book what you need, not the whole day.</b> Say what it is for in the title, so someone who
+                needs the instrument knows whether to ask.</li>
+            <li><b>Tag the people with you.</b> The booking then shows on their calendar and their notebook day
+                too.</li>
+            <li><b>Say what it is for in the title.</b> <i>Genotyping T2 (35S-F / tRFP-R)</i> is useful;
+                <i>booking</i> is not.</li>
+        </ol>
+    </section>
+
+    <section id="book">
+        <h2>Booking something</h2>
+        <ol class="steps">
+            <li><b>Calendar</b>: pick the room or instrument at the left. Its week appears, with today marked.</li>
+            <li>Click an empty slot, or drag down it for a longer one. Use the arrows to change week, or the date
+                box to jump.</li>
+            <li>Give it a <b>title</b> saying what it is for, check the start and end, and add anyone else taking
+                part.</li>
+            <li>Save. It appears in the calendar in that instrument's colour, and under <b>My bookings</b>.</li>
+        </ol>
+        <p>Where several things of one kind are shared &mdash; four growth chambers, say &mdash; <b>All
+           &lt;kind&gt;s</b> shows them side by side for one day, which is the quickest way to see what is
+           free.</p>
+    </section>
+
+    <section id="find">
+        <h2>Finding a free slot</h2>
+        <p>When what matters is getting an hour on <i>a</i> microscope rather than a particular one, use
+           <b>Find a slot</b>:</p>
+        <ol class="steps">
+            <li>Say the <b>kind</b> of thing you need, and where, if it matters.</li>
+            <li>Say <b>how long</b> for, and roughly when &mdash; a date range, and the part of the day that
+                suits.</li>
+            <li>It lists the free slots that fit, across everything of that kind you may book. Pick one and it
+                is filled in for you.</li>
+        </ol>
+    </section>
+
+    <section id="people">
+        <h2>The people with you</h2>
+        <p>Add whoever is taking part to the booking. For each of them it then appears under <b>My bookings</b>
+           and on their <b>notebook day</b>, so a session with a student or a visitor is on everybody's
+           calendar without a second booking.</p>
+        <p>Tagging someone does not let them change the booking; it stays with whoever made it, and with the
+           instrument's managers.</p>
+    </section>
+
+    <section id="mine">
+        <h2>Changing and cancelling</h2>
+        <ul>
+            <li><b>My bookings</b> lists what is coming, soonest first.</li>
+            <li>Open one to change its time, its title or who is in it &mdash; the same rules are checked
+                again.</li>
+            <li><b>Cancel</b> frees the slot at once. A cancelled booking leaves the calendar but is kept, so it
+                is clear what happened.</li>
+            <li>A booking that has already started can be ended early by shortening it.</li>
+        </ul>
+    </section>
+
+    <section id="refused">
+        <h2>When a booking is refused</h2>
+        <p>The calendar says which rule it ran into:</p>
+        <ul>
+            <li><b>"booked in steps of 30 minutes"</b> &mdash; start and finish on the step, not at 10:17.</li>
+            <li><b>"booked for at least…" / "at most…"</b> &mdash; the shortest and longest allowed for that
+                instrument.</li>
+            <li><b>"can be booked at most N days ahead"</b> &mdash; wait, or ask one of its managers, who are not
+                held to that limit.</li>
+            <li><b>"is not booked on Sundays" / "booked from 08:00 to 18:00"</b> &mdash; its open days and
+                hours.</li>
+            <li><b>"that time has passed"</b> &mdash; the slot has gone; book from now on.</li>
+            <li><b>A clash</b> &mdash; someone has it. Their booking is on the calendar, with who made it, so you
+                can ask.</li>
+        </ul>
+    </section>
+
+    <section id="notebook">
+        <h2>Your notebook</h2>
+        <p>Open a day in the <b>Lab Notebook</b> and the bookings you had that day are at the top, with the
+           instrument and the time, and what is coming next. Nothing to fill in: it is simply there, so a
+           picture in the notebook can be traced to the microscope that took it.</p>
+    </section>
+
+    <section id="manage">
+        <h2>Adding a room or instrument</h2>
+        <p>For a lab's <b>lab admins</b>. Under <b>Manage</b>:</p>
+        <ol class="steps">
+            <li><b>Add</b>, then its <b>name</b> and what <b>kind</b> of thing it is &mdash; <i>Meeting room</i>,
+                <i>Microscope</i>, <i>Growth chamber</i>. The kind is free text, but keep to the words already in
+                use: <b>Find a slot</b> and the day view group by it.</li>
+            <li>Where it is, how many it seats if that matters, and a <b>colour</b> so it is recognisable in the
+                calendar.</li>
+            <li>In the description, put what people need to know before they book: the rules of the room, who to
+                ask for training, where the key is.</li>
+            <li>Set its rules and who it is shared with, below.</li>
+        </ol>
+        <p>Something no longer in use is <b>retired</b> rather than deleted: it leaves the lists, and the
+           bookings that were made on it stay readable.</p>
+    </section>
+
+    <section id="limits">
+        <h2>Setting the rules</h2>
+        <ul>
+            <li><b>Steps</b> &mdash; 15, 30 or 60 minutes, or a whole day. Bookings must start and end on
+                these.</li>
+            <li><b>Shortest and longest</b> &mdash; stops both a five-minute booking and a week-long one. Leave
+                the longest empty for no limit.</li>
+            <li><b>How far ahead</b> &mdash; the usual way of keeping a popular instrument fair. Its managers may
+                book beyond it, for courses and service visits.</li>
+            <li><b>Open days and hours</b> &mdash; which weekdays, and between what times. A growth chamber is
+                normally open always; a meeting room is not.</li>
+        </ul>
+        <p>Changing a rule does not disturb bookings already made.</p>
+    </section>
+
+    <section id="sharing">
+        <h2>Sharing it</h2>
+        <p>Choose who may see and book it: your own lab, named <b>labs</b>, whole <b>chair groups</b>, or
+           everyone in the suite. Anyone it is shared with can book it; only its managers change its rules or
+           move someone else's booking.</p>
+    </section>
+
+    <section id="mistakes">
+        <h2>Fixing mistakes</h2>
+        <ul>
+            <li><b>Booked the wrong instrument:</b> cancel it and book the right one. There is no penalty for
+                cancelling early, and every reason to.</li>
+            <li><b>Booked the wrong week:</b> open the booking and change its date rather than making a second
+                one.</li>
+            <li><b>Someone has a slot they are not using:</b> their name is on the booking. Ask them; a manager
+                can move it if they cannot be reached.</li>
+            <li><b>An instrument is missing from the list:</b> it may not be shared with your lab yet. Ask the lab
+                that owns it.</li>
+            <li><b>The rules are wrong for how the lab works:</b> a lab admin can change them under Manage, and
+                existing bookings are left alone.</li>
+        </ul>
+    </section>
+</main>
+</body>
+</html>

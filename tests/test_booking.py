@@ -300,3 +300,13 @@ def test_someone_who_left_frees_their_bookings_ahead(as_user, world):
     leaves(world, 'cal')
     assert ana.put(f"/api/bookings/{other['id']}", json={'title': 'Still', 'people': ['cal']}).status_code == 200
     assert meeting['id']
+
+
+def test_the_about_and_help_pages_are_there_and_point_at_each_other(world):
+    client = world['app'].test_client()
+    for path, heading in (('/about', 'Booking'), ('/help', 'How to use Booking')):
+        r = client.get(path)
+        assert r.status_code == 200, path
+        assert heading in r.get_data(as_text=True)
+    assert '/help' in client.get('/about').get_data(as_text=True)
+    assert '/about' in client.get('/help').get_data(as_text=True)

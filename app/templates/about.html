@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>About · Booking</title>
+    <link rel="stylesheet" href="{{ request.script_root }}/static/trellis/trellis.css?v={{ version }}">
+    <link rel="stylesheet" href="{{ request.script_root }}/static/css/booking.css?v={{ version }}">
+</head>
+<body class="tt">
+<header class="tt-bar">
+    <a class="tt-home" href="{{ links.suite_home }}" title="All of Trellis Tools"><img src="{{ request.script_root }}/static/trellis/trellis.svg" alt=""><span>Trellis Tools</span></a>
+    <a class="tt-module" href="{{ request.script_root }}/"><img src="{{ request.script_root }}/static/trellis/booking.svg" alt="">Booking</a><span class="tt-sub">About</span>
+</header>
+<main class="help">
+    <h1>Booking {{ version }}</h1>
+    <p class="lead">The calendar for the lab's rooms and equipment: meeting rooms, microscopes, growth
+       chambers, whatever needs sharing. Booked ahead on a week calendar or by finding a free slot, with the
+       people in each booking, and shown in the Lab Notebook on the day.
+       <a href="{{ request.script_root }}/help">How to use it →</a></p>
+
+    <nav class="help-toc">
+        <a href="#holds">What it holds</a>
+        <a href="#rules">Each thing has its own rules</a>
+        <a href="#sees">Who sees and books what</a>
+        <a href="#together">With the other tools</a>
+        <a href="#kept">Where the data is kept</a>
+        <a href="#licence">Licence</a>
+    </nav>
+
+    <section id="holds">
+        <h2>What it holds</h2>
+        <div class="help-cards">
+            <div class="help-card">
+                <h3><img class="tt-glyph" src="{{ request.script_root }}/static/trellis/glyphs/calendar.svg" alt=""> A week calendar</h3>
+                <p>Each room or instrument on its own calendar, today marked, bookings in the colour of the
+                   thing booked. Move a week at a time or jump to a date.</p>
+            </div>
+            <div class="help-card">
+                <h3><img class="tt-glyph" src="{{ request.script_root }}/static/trellis/glyphs/history.svg" alt=""> Find a slot</h3>
+                <p>Say what kind of thing you need, for how long, roughly when and where: it lists the free
+                   slots rather than making you read every calendar.</p>
+            </div>
+            <div class="help-card">
+                <h3><img class="tt-glyph" src="{{ request.script_root }}/static/trellis/glyphs/people.svg" alt=""> People in a booking</h3>
+                <p>Tag whoever is taking part. It then shows in their bookings and on their notebook day, so a
+                   shared session is on everyone's calendar.</p>
+            </div>
+            <div class="help-card">
+                <h3><img class="tt-glyph" src="{{ request.script_root }}/static/trellis/glyphs/wrench.svg" alt=""> Rooms and equipment</h3>
+                <p>Added by a lab's admins: what it is, where it is, how many it seats, and who may book
+                   it.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="rules">
+        <h2>Each thing has its own rules</h2>
+        <p>Whoever adds a room or instrument sets how it is booked, and the calendar then keeps to it:</p>
+        <ul>
+            <li>the <b>steps</b> it is booked in &mdash; a microscope by the half hour, a growth chamber by the
+                day;</li>
+            <li>the <b>shortest and longest</b> a booking may be;</li>
+            <li>how far <b>ahead</b> it may be booked, so nobody takes the confocal for all of next term;</li>
+            <li>the <b>days and hours</b> it is open.</li>
+        </ul>
+        <p>Its managers are not held to the limits on how far ahead, so a course or a service visit can be put
+           in the calendar early.</p>
+    </section>
+
+    <section id="sees">
+        <h2>Who sees and books what</h2>
+        <ul>
+            <li>A room or instrument is shared with the <b>labs and chair groups</b> its managers choose, or with
+                everyone in the suite.</li>
+            <li>Anyone it is shared with can see its calendar and book it.</li>
+            <li>Its <b>managers</b> &mdash; the lab admins of the lab that added it &mdash; change its rules, and
+                can move or cancel anyone's booking.</li>
+            <li>You can always change or cancel <b>your own</b> bookings.</li>
+        </ul>
+    </section>
+
+    <section id="together">
+        <h2>With the other tools</h2>
+        <p>A day page in the <b>Lab Notebook</b> shows what you booked that day, with the room or instrument
+           and the time. That way the notebook knows which microscope a picture came from without anyone
+           writing it down, and a booking you were tagged in appears on your day as well.</p>
+    </section>
+
+    <section id="kept">
+        <h2>Where the data is kept</h2>
+        <p>On the lab's own server, in its own database, backed up each night with the rest of the suite.
+           Times are kept in UTC and shown in the lab's own time zone, so a booking stays put when the clocks
+           change.</p>
+    </section>
+
+    <section id="licence">
+        <h2>Licence</h2>
+        <p>Free software under the GNU General Public License v3.0.</p>
+    </section>
+</main>
+</body>
+</html>

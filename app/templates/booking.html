@@ -21,6 +21,8 @@
     </nav>
     <nav class="tt-links">
         <a href="{{ links.notebook }}/" target="_blank" rel="noopener">Notebook ↗</a>
+        <a href="{{ request.script_root }}/help">Help</a>
+        <a href="{{ request.script_root }}/about">About</a>
     </nav>
     <span class="tt-user">{{ person.username }}{% if person.labs %} · {{ person.labs[0].lab }}{% endif %}{% if person.is_admin %} · admin{% endif %}</span>
     <a class="tt-logout" href="{{ links.logout }}">Log out</a>

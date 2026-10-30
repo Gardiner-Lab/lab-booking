@@ -152,3 +152,24 @@ table.data tr.retired td { color: var(--muted); }
 .toasts { position: fixed; bottom: 1rem; left: 50%; transform: translateX(-50%); display: grid; gap: .4rem; z-index: 100; }
 .toast { background: var(--tt-text); color: #fff; padding: .55rem .9rem; border-radius: .5rem; font-size: .9rem; box-shadow: 0 4px 14px rgba(0, 0, 0, .2); }
 .toast.error { background: var(--danger); }
+
+/* the About and How to use pages */
+.help { max-width: 900px; margin: 0 auto; padding: 1.5rem 1.5rem 5rem; line-height: 1.6; }
+.help h1 { font-size: 1.8rem; margin-bottom: .3rem; }
+.help h2 { margin-top: 2.2rem; padding-top: .5rem; border-top: 1px solid var(--border); font-size: 1.3rem; }
+.help .lead { font-size: 1.05rem; color: var(--text); }
+.help code { background: var(--hover); padding: 0 .3rem; border-radius: .25rem; }
+.help-toc { display: flex; flex-wrap: wrap; gap: .4rem; margin: 1rem 0; }
+.help-toc a { text-decoration: none; background: var(--card); border: 1px solid var(--border); border-radius: 1rem; padding: .15rem .7rem; font-size: .88rem; }
+.help-toc a:hover { background: var(--accent-soft); }
+.help-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: .8rem; }
+.help-card { background: var(--card); border: 1px solid var(--border); border-radius: .6rem; padding: .3rem 1rem; }
+.help-card h3 { margin: .6rem 0 .2rem; }
+.flow { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; margin: .8rem 0; }
+.flow-box { background: var(--accent-soft); color: var(--accent-ink); border-radius: .45rem; padding: .3rem .7rem; font-weight: 600; font-size: .9rem; }
+.flow-arrow { color: var(--muted); font-size: .9rem; }
+.help ol.steps li, .help ol.rules li { margin-bottom: .55rem; }
+.help ol.rules { background: #fdf6e3; border: 1px solid #ecd5a0; border-radius: .6rem; padding: .8rem 1rem .5rem 2.2rem; }
+.faq dt { font-weight: 600; margin-top: .8rem; }
+.faq dd { margin: .2rem 0 0 1rem; }
+.help section { scroll-margin-top: 4rem; }

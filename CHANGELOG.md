@@ -5,6 +5,12 @@ and the project uses [semantic versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+- **About** and **Help** pages. *How to use Booking* covers booking, finding a free slot, the people with you,
+  changing and cancelling, what each refusal means, and &mdash; for lab admins &mdash; adding a room or
+  instrument, setting its rules and sharing it. Both are linked from the top bar, and Help from the empty
+  calendar.
+
 ## [0.2.0] - 2026-10-23
 
 ### Changed

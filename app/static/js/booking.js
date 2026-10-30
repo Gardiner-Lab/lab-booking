@@ -129,7 +129,9 @@ async function showCalendar(params) {
     main.replaceChildren(el('div', { class: 'empty' },
       el('p', {}, 'Nothing to book yet.'),
       BK.person.can_add ? el('p', {}, el('a', { class: 'btn btn-primary', href: '#manage' }, '＋ Add a room or piece of equipment'))
-        : el('p', {}, 'Your lab admin adds the rooms and equipment people book.')));
+        : el('p', {}, 'Your lab admin adds the rooms and equipment people book.'),
+      el('p', { class: 'hint' }, 'New here? ', el('a', { href: `${BK.base}/help` }, 'How to use Booking'),
+        BK.person.can_add ? ' — booking, finding a free slot, and adding a room or instrument.' : ' — booking, finding a free slot, and the rules each thing has.')));
     return;
   }
   const date = params.get('d') ? fromYmd(params.get('d')) : midnight(new Date());
