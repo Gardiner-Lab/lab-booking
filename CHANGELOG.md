@@ -5,6 +5,8 @@ and the project uses [semantic versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-10-30
+
 ### Added
 - **About** and **Help** pages. *How to use Booking* covers booking, finding a free slot, the people with you,
   changing and cancelling, what each refusal means, and &mdash; for lab admins &mdash; adding a room or
