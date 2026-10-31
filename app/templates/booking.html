@@ -20,7 +20,6 @@
         {% if person.can_add %}<a class="tt-tab view-tab" data-view="manage" href="#manage">Rooms &amp; equipment</a>{% endif %}
     </nav>
     <nav class="tt-links">
-        <a href="{{ links.notebook }}/" target="_blank" rel="noopener">Notebook ↗</a>
         <a href="{{ request.script_root }}/help">Help</a>
         <a href="{{ request.script_root }}/about">About</a>
     </nav>
@@ -40,5 +39,6 @@
     };
 </script>
 <script src="{{ request.script_root }}/static/js/booking.js?v={{ version }}"></script>
+<script src="{{ request.script_root }}/static/trellis/modules.js?v={{ version }}" defer></script>
 </body>
 </html>
