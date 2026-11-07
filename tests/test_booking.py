@@ -324,3 +324,32 @@ def test_every_page_reaches_the_suite_and_its_other_tools():
             continue
         assert 'class="tt-home" href="{{ links.suite_home }}"' in html, f'{page.name}: home link is not the suite'
         assert 'trellis/modules.js' in html, f'{page.name}: the other tools are not linked'
+
+
+# --- the teaching demo ----------------------------------------------------------
+
+def make_demo(world, group='cg-chem'):
+    """The suite's teaching demo: here the Chemistry chair group (the Jones lab, jo)."""
+    import sqlite3
+    conn = sqlite3.connect(world['paths']['suite'])
+    conn.execute('CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT)')
+    conn.execute("INSERT OR REPLACE INTO settings VALUES ('demo.chair_group', ?)", (group,))
+    conn.commit()
+    conn.close()
+
+
+def test_the_demo_sees_only_the_demos(as_user, world):
+    make_demo(world)
+    room = add(as_user('ana'), everyone=True)                          # a real lab's, shared with everyone
+    demo_room = add(as_user('boss'), owner_lab_id='lab-j', name='Demo microscope')
+    seen = lambda who: [r['id'] for r in as_user(who).get('/api/resources').get_json()['resources']]
+    assert room['id'] not in seen('jo') and demo_room['id'] in seen('jo')
+    assert room['id'] in seen('lou')                                    # everyone else still sees it
+    assert book(as_user('jo'), room, weekday_ahead(), '10:00', '11:00').status_code == 404
+    # Only the demo's people to tag, and the real ones cannot be tagged.
+    assert as_user('jo').get('/api/people').get_json()['people'] == ['jo']
+    assert 'ana' in as_user('lou').get('/api/people').get_json()['people']
+    assert book(as_user('jo'), demo_room, weekday_ahead(), '10:00', '11:00', people=['ana']).status_code == 400
+    # A real lab sharing with the demo's lab does not reach it either.
+    as_user('ana').put(f"/api/resources/{room['id']}", json={'everyone': False, 'shares': [{'type': 'lab', 'id': 'lab-j'}]})
+    assert room['id'] not in seen('jo')

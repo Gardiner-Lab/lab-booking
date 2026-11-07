@@ -5,6 +5,11 @@ and the project uses [semantic versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-11-08
+
+### Demo
+- **The teaching demo sees only the demo's.** Someone in the suite's demo (its chair group, recorded by the suite's demo) sees only the demo labs' rooms and equipment, even ones a real lab shares with everyone or with a demo lab, can tag only the demo's people, and is offered only the demo's labs and chair group to share with.
+
 ## [0.4.0] - 2026-10-31
 
 ### Added

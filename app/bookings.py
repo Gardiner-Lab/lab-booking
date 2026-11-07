@@ -218,7 +218,7 @@ def _clean_people(people, booker: str) -> List[str]:
         return []
     if not isinstance(people, list):
         raise ValueError('People are a list of usernames')
-    known = {u.casefold(): u for u in everyone(include_archived=True)}
+    known = {u.casefold(): u for u in everyone(include_archived=True, seen_by=booker)}
     out = []
     for name in people:
         found = known.get(str(name or '').strip().casefold())

@@ -48,7 +48,7 @@ def me(person):
 @signed_in
 def everyone(person):
     """Everyone with an account, to tag in a booking."""
-    return jsonify({'people': people.everyone()})
+    return jsonify({'people': people.everyone(seen_by=person.username)})
 
 
 # --- rooms and equipment -------------------------------------------------------

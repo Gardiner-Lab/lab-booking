@@ -86,11 +86,41 @@ def archived() -> Dict[str, str]:
     return {r['username']: r['archived_at'] for r in _read(suite_path(), 'SELECT username, archived_at FROM archived')}
 
 
-def everyone(include_archived: bool = False) -> List[str]:
-    """Everyone with an account, by name, to tag in bookings: not those who left, unless asked for."""
+def demo_lab_ids() -> Set[str]:
+    """
+    The teaching demo's labs: those in the chair group the suite records as the demo's
+    (suite.db settings 'demo.chair_group', set by the suite's demo/accounts.py); none without a demo.
+    """
+    rows = _read(suite_path(), "SELECT value FROM settings WHERE key = 'demo.chair_group'")
+    group = rows[0]['value'] if rows else None
+    return {lab['id'] for lab in labs() if group and lab['chair_group_id'] == str(group)}
+
+
+def in_demo(username: Optional[str]) -> bool:
+    """
+    In the teaching demo: every lab of theirs is one of the demo's. They see the demo's rooms,
+    equipment and people, and nothing of the real labs', whatever is shared with everyone.
+    """
+    demo = demo_lab_ids()
+    mine = {m['lab_id'] for m in memberships(username)} if demo and username else set()
+    return bool(mine) and mine <= demo
+
+
+def demo_people() -> Set[str]:
+    demo = demo_lab_ids()
+    return {r['username'] for r in _read(suite_path(), 'SELECT username, lab_id FROM lab_members')
+            if str(r['lab_id']) in demo} if demo else set()
+
+
+def everyone(include_archived: bool = False, seen_by: Optional[str] = None) -> List[str]:
+    """
+    Everyone with an account, by name, to tag in bookings: not those who left, unless asked for.
+    Seen by someone in the demo, only the demo's people.
+    """
     gone = {} if include_archived else archived()
+    only = demo_people() if seen_by and in_demo(seen_by) else None
     return [r['username'] for r in _read(directory_path(), 'SELECT username FROM users ORDER BY username COLLATE NOCASE')
-            if r['username'] != 'system' and r['username'] not in gone]
+            if r['username'] != 'system' and r['username'] not in gone and (only is None or r['username'] in only)]
 
 
 @dataclass
@@ -114,6 +144,10 @@ class Person:
     def chair_group_ids(self) -> Set[str]:
         mine = self.lab_ids
         return {lab['chair_group_id'] for lab in labs() if lab['id'] in mine and lab['chair_group_id']}
+
+    @property
+    def in_demo(self) -> bool:
+        return not self.is_admin and bool(self.lab_ids) and self.lab_ids <= demo_lab_ids()
 
     @property
     def can_add(self) -> bool:

@@ -21,7 +21,7 @@ from typing import Dict, List, Optional
 
 from app import times
 from app.db import connect
-from app.people import Person, chair_groups, labs
+from app.people import Person, chair_groups, demo_lab_ids, labs
 
 
 class Forbidden(Exception):
@@ -43,6 +43,8 @@ def _shares(conn, resource_id: str) -> List[dict]:
 
 
 def can_see(person: Person, row, shares: List[dict]) -> bool:
+    if person.in_demo and row['owner_lab_id'] not in demo_lab_ids():
+        return False      # the teaching demo sees the demo labs' rooms and equipment only
     if person.is_admin or row['everyone'] or (row['owner_lab_id'] in person.lab_ids):
         return True
     groups = person.chair_group_ids
@@ -118,8 +120,14 @@ def sharing_choices(person: Person) -> dict:
     """For the form: the labs it can belong to (theirs to run), and the labs and chair groups to share with."""
     run = person.admin_lab_ids
     all_labs = labs()
+    groups = chair_groups()
+    if person.in_demo:
+        # The demo shares among its own labs and chair group; it is not shown the real ones.
+        demo = demo_lab_ids()
+        all_labs = [lab for lab in all_labs if lab['id'] in demo]
+        groups = [g for g in groups if set(g['labs']) <= demo and g['labs']]
     return {'own_labs': [lab for lab in all_labs if lab['id'] in run],
-            'labs': all_labs, 'chair_groups': chair_groups()}
+            'labs': all_labs, 'chair_groups': groups}
 
 
 def _int(data, key, default, low, high, allow_none=False, what=''):
