@@ -173,3 +173,8 @@ table.data tr.retired td { color: var(--muted); }
 .faq dt { font-weight: 600; margin-top: .8rem; }
 .faq dd { margin: .2rem 0 0 1rem; }
 .help section { scroll-margin-top: 4rem; }
+
+/* Where a thing stands on the Lab Map: a link that opens the map on it. */
+.map-link { font-size: .85rem; text-decoration: none; white-space: nowrap; margin-left: .5rem; }
+.map-link:hover { text-decoration: underline; }
+td > .map-link { display: inline-block; margin-left: 0; }

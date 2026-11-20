@@ -15,7 +15,7 @@ const KIND_IDEAS = ['Meeting room', 'Microscope', 'Growth chamber', 'PCR machine
   'Fume hood', 'Flow cabinet', 'Gel imager', 'Plate reader', 'Spectrophotometer'];
 const WEEKDAYS = [['1', 'Mon'], ['2', 'Tue'], ['3', 'Wed'], ['4', 'Thu'], ['5', 'Fri'], ['6', 'Sat'], ['7', 'Sun']];
 
-const state = { resources: [], kinds: [], people: null, choices: null };
+const state = { resources: [], kinds: [], people: null, choices: null, places: null };
 const $ = (id) => document.getElementById(id);
 
 /** A small element builder: el('td', { class: 'x', onclick }, 'text', child, ...). */
@@ -87,10 +87,35 @@ function fmtMinutes(m) {
 /* --- data ---------------------------------------------------------------------- */
 
 async function loadResources(retired = false) {
-  const data = await api('GET', `/resources${retired ? '?retired=1' : ''}`);
+  const [data] = await Promise.all([api('GET', `/resources${retired ? '?retired=1' : ''}`), loadPlaces()]);
   if (!retired) state.resources = data.resources;
   state.kinds = data.kinds;
   return data.resources;
+}
+
+/**
+ * Where each thing is on the Lab Map: the places a lab admin linked to it there (resource id -> place).
+ * Asked once; without a map in the suite, or with nothing linked, there are no links.
+ */
+async function loadPlaces() {
+  if (state.places || !BK.map) return state.places || new Map();
+  state.places = new Map();
+  try {
+    const res = await fetch(`${BK.map}/api/places`, { credentials: 'same-origin', cache: 'no-store' });
+    if (res.ok) {
+      for (const p of (await res.json()).places || []) if (p.resource_id) state.places.set(p.resource_id, p);
+    }
+  } catch { /* no map */ }
+  return state.places;
+}
+
+/** A link that opens the map on where a room or piece of equipment stands, if it is marked there. */
+function mapLink(resourceId, short = false) {
+  const p = state.places && state.places.get(resourceId);
+  if (!p) return null;
+  return el('a', { class: 'map-link', href: `${BK.map}/#place=${encodeURIComponent(p.id)}`, target: BK.embed ? '_top' : '_self',
+    title: `On the map: ${p.map}${p.room ? `, ${p.room}` : ''}`, onclick: (e) => e.stopPropagation() },
+  '📍 ', short ? 'map' : `On the map${p.room ? `: ${p.room}` : ''}`);
 }
 
 async function loadPeople() {
@@ -170,7 +195,7 @@ async function showCalendar(params) {
 
   const title = view === 'week'
     ? [el('h2', {}, el('span', { class: 'dot', style: `background:${resource.colour};margin-right:.4rem` }), resource.name),
-      el('span', { class: 'sub' }, [resource.location, rulesSummary(resource)].filter(Boolean).join(' · '))]
+      el('span', { class: 'sub' }, [resource.location, rulesSummary(resource)].filter(Boolean).join(' · ')), mapLink(resource.id)]
     : [el('h2', {}, `${kind} · ${fmtLongDay(start)}`)];
   const label = view === 'week' ? `${fmtDay(start)} – ${fmtDay(addDays(end, -1))}` : '';
   const jump = el('input', { type: 'date', value: ymd(date), 'aria-label': 'Go to a date',
@@ -527,6 +552,7 @@ async function showMine(params) {
         el('span', { class: 'dot', style: `background:${b.resource.colour}` }),
         el('span', { class: 'when' }, fmtSpan(b.start, b.end)),
         el('span', { class: 'what' }, el('b', {}, b.resource.name, b.resource.location ? el('span', { class: 'hint' }, ` · ${b.resource.location}`) : null),
+          mapLink(b.resource_id, true),
           el('span', {}, b.title || ''),
           el('span', { class: 'hint', style: 'display:block' }, b.mine ? (b.people.length ? `With ${b.people.join(', ')}` : 'Just you')
             : `Booked by ${b.booked_by}${b.people.length > 1 ? `, with ${b.people.filter((p) => p !== BK.person.username).join(', ')}` : ''}`)),
@@ -560,7 +586,7 @@ async function showManage() {
       el('thead', {}, el('tr', {}, ['', 'Name', 'Kind', 'Belongs to · shared with', 'Rules', 'Bookings', ''].map((h) => el('th', {}, h)))),
       el('tbody', {}, all.map((r) => el('tr', { class: r.retired_at ? 'retired' : '' },
         el('td', {}, el('span', { class: 'dot', style: `background:${r.colour}` })),
-        el('td', {}, el('b', {}, r.name), r.location ? el('div', { class: 'hint' }, r.location) : null,
+        el('td', {}, el('b', {}, r.name), r.location ? el('div', { class: 'hint' }, r.location) : null, mapLink(r.id),
           r.retired_at ? el('span', { class: 'badge retired' }, 'retired') : null),
         el('td', {}, r.kind),
         el('td', {}, shareText(r)),

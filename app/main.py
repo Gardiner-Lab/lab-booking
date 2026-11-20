@@ -11,7 +11,7 @@ import os
 
 from flask import Flask, redirect, render_template, request
 
-APP_VERSION = '0.5.0'
+APP_VERSION = '0.6.0'
 
 # The tabs this tool adds to the suite's dashboard (see the suite's pages/dashboard.html).
 MANIFEST = {
@@ -52,6 +52,8 @@ def create_app() -> Flask:
         return {
             'suite_home': os.environ.get('SUITE_HOME_URL', '/'),
             'notebook': os.environ.get('NOTEBOOK_URL', '/notebook').rstrip('/'),
+            # The Lab Map, where equipment marked on a floor plan is shown. Empty: no map in this suite.
+            'map': os.environ.get('MAP_URL', '/map').rstrip('/'),
             'logout': os.environ.get('SUITE_LOGOUT_URL', '/account/logout'),
         }
 

@@ -34,6 +34,7 @@
     window.BK = {
         base: {{ request.script_root | tojson }},
         notebook: {{ links.notebook | tojson }},
+        map: {{ links.map | tojson }},
         person: {{ person.to_dict() | tojson }},
         embed: {{ 'true' if embed else 'false' }},
     };

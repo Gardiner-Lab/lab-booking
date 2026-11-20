@@ -5,6 +5,14 @@ and the project uses [semantic versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-11-20
+
+### Added
+- **Where a thing stands, on the Lab Map.** A room or piece of equipment that a lab admin has marked on the lab's
+  floor plan links to its place there, **📍 On the map**, from its calendar, the list of rooms and equipment and
+  My bookings. The map, in turn, shows today's bookings of a machine and opens its calendar. Without a map in the
+  suite (`MAP_URL` empty), nothing changes.
+
 ## [0.5.0] - 2026-11-08
 
 ### Demo
